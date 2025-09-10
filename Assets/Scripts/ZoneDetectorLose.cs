@@ -5,15 +5,16 @@ using UnityEngine.SceneManagement;
 public class ZoneDetectorLose : MonoBehaviour
 {
     public GameObject noGo;
+    public GameObject warnUI;
     [SerializeField] private float warnDist;
     [SerializeField] private float killDist;
+    [SerializeField] private float shakeInt;
     private float playerDist;
-    private float ogPosx, ogPosy;
+    private Vector3 originalPos;
 
     private void Start()
     {
-        ogPosx = noGo.transform.position.x;
-        ogPosy = noGo.transform.position.y;
+        originalPos = noGo.transform.position;
     }
 
     private void Update()
@@ -29,19 +30,32 @@ public class ZoneDetectorLose : MonoBehaviour
         // Losing Function
         if (playerDist <= killDist)
         {
-            Debug.Log("You died! Restarting scene");
+            //Debug.Log("You died! Restarting scene");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         else if (playerDist <= warnDist)
         {
-            Debug.Log("Too close to no-go zone");
+            //Debug.Log("Too close to no-go zone");
+            warnUI.SetActive(true);
+            Shake();
             noGo.GetComponent<SpriteRenderer>().color = Color.red;
         }
         else
         {
+            warnUI.SetActive(false);
             noGo.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
+    
+    private void Shake()
+    {
+        float randomDistX = Random.Range(-1f, 1f) * shakeInt;
+        float randomDistY = Random.Range(-1f, 1f) * shakeInt;
 
+        noGo.transform.position = new Vector3(
+            originalPos.x + randomDistX,
+            originalPos.y + randomDistY
+        );
+    }
 
 }

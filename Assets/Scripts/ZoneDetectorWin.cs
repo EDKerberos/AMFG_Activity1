@@ -4,7 +4,7 @@ using TMPro;
 public class ZoneDetectorWin : MonoBehaviour
 {
     public GameObject finishZone;
-    public GameObject winUI;
+    public GameObject[] winUI;
     [SerializeField] private float winDist;
     private float playerDist;
 
@@ -22,8 +22,11 @@ public class ZoneDetectorWin : MonoBehaviour
         // Winning Function
         if (playerDist <= winDist)
         {
-            Debug.Log("You freaking win");
-            winUI.SetActive(true);
+            //Debug.Log("You freaking win");
+            foreach (GameObject text in winUI)
+            {
+                text.SetActive(true);
+            }
         }
     }
 
